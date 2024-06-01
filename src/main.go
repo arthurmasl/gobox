@@ -7,11 +7,11 @@ import (
 )
 
 type Vector struct {
-	x, y, z int
+	x, y int
 }
 
 func (v *Vector) sum() int {
-	return v.x + v.y + v.z
+	return v.x + v.y
 }
 
 func check(e error) {
@@ -21,8 +21,8 @@ func check(e error) {
 }
 
 func main() {
-	v1 := Vector{10, 20, 1}
-	v1.z = 55
+	v1 := Vector{10, 20}
+	v1.x = 55
 
 	fmt.Println(v1)
 	fmt.Println(v1.sum())
