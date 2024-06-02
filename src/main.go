@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"slices"
+	"time"
 )
 
 type Vector struct {
@@ -14,29 +13,24 @@ func (v *Vector) sum() int {
 	return v.x + v.y
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
+var vectors [10000000]Vector
+
+var items = map[string]Vector{
+	"one": {10, 10},
+	"two": {20, 20},
 }
 
 func main() {
-	v1 := Vector{10, 20}
-	v1.x = 55
+	t1 := time.Now()
+	sum := 0
 
-	fmt.Println(v1)
-	fmt.Println(v1.sum())
+	for i, vector := range vectors {
+		vector.x = i
+		sum += vector.sum()
+	}
 
-	text := []byte("hello, world")
-	e := os.WriteFile("test.txt", text, 0)
-	check(e)
+	fmt.Println(sum)
+	fmt.Println(time.Since(t1))
 
-	strings := []string{"c", "a", "b"}
-	nums := []int{5, 54, 1, 13, 65}
-
-	slices.Sort(strings)
-	slices.Sort(nums)
-
-	fmt.Println(strings)
-	fmt.Println(nums)
+	fmt.Println(items)
 }
