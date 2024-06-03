@@ -2,14 +2,19 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
+
+type VectorI interface {
+	Sum()
+}
 
 type Vector struct {
 	x, y int
 }
 
-func (v *Vector) sum() int {
+func (v *Vector) Sum() int {
 	return v.x + v.y
 }
 
@@ -26,11 +31,26 @@ func main() {
 
 	for i, vector := range vectors {
 		vector.x = i
-		sum += vector.sum()
+		sum += vector.Sum()
 	}
 
 	fmt.Println(sum)
 	fmt.Println(time.Since(t1))
 
 	fmt.Println(items)
+
+	elem, ok := items["three"]
+	fmt.Println(elem, ok)
+
+	fmt.Println(WordCount("hello world"))
+}
+
+func WordCount(s string) map[string]int {
+	res := make(map[string]int)
+
+	for _, word := range strings.Fields(s) {
+		res[string(word)] = 1
+	}
+
+	return res
 }
