@@ -2,12 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strings"
 	"sync"
-	"syscall"
-
-	"golang.org/x/term"
 )
 
 type Column struct {
@@ -70,7 +66,7 @@ func update() {
 	grid = [20]string{}
 
 	for _, column := range columns {
-		title := fmt.Sprintf(format, strings.Join([]string{" ", column.name}, ""))
+		title := fmt.Sprintf(format, strings.Join([]string{"#", column.name}, ""))
 		grid[0] = strings.Join([]string{grid[0], title}, separator)
 
 		for i, item := range column.items {
@@ -85,93 +81,11 @@ func update() {
 	}
 }
 
-func handleInput() {
-	wg.Add(1)
-
-	oldState, err := term.MakeRaw(int(syscall.Stdin))
-	if err != nil {
-		fmt.Println("error making terminal raw")
-	}
-	defer term.Restore(int(syscall.Stdin), oldState)
-
-	buf := make([]byte, 1)
-
-	for {
-		_, err := os.Stdin.Read(buf)
-		if err != nil {
-			fmt.Println("error readin input")
-		}
-
-		char := buf[0]
-
-		if char == 'q' {
-			wg.Done()
-			break
-		}
-
-		c, i := getFocusedIndexes()
-
-		if char == 'w' {
-			nextColumnIndex := c + 1
-			if nextColumnIndex < len(columns) {
-				columns[nextColumnIndex].items[0].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'b' {
-			prevIndex := c - 1
-			if prevIndex >= 0 {
-				columns[prevIndex].items[0].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'j' {
-			nextItemIndex := i + 1
-			if nextItemIndex < len(columns[c].items) {
-				columns[c].items[nextItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'k' {
-			nextItemIndex := i - 1
-			if nextItemIndex >= 0 {
-				columns[c].items[nextItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		update()
-		draw()
-
-	}
-}
-
-func getFocusedIndexes() (int, int) {
-	focusedColumn := 0
-	focusedItem := 0
-
-	for c, column := range columns {
-		for i, item := range column.items {
-			if item.focused {
-				focusedColumn = c
-				focusedItem = i
-
-				break
-			}
-		}
-	}
-
-	return focusedColumn, focusedItem
-}
-
 func draw() {
 	clearConsole()
 
-	fmt.Print("  [b]left [w]right", "\r\n")
-	fmt.Print("  [j]down  [k]up", "\r\n")
+	fmt.Print("  [b]left   [w]right", "\r\n")
+	fmt.Print("  [j]down   [k]up", "\r\n")
 	fmt.Print(emptyLine, "\r\n")
 	for _, row := range grid {
 		fmt.Print(row, "\r\n")
