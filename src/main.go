@@ -2,7 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
+	"sync"
+	"syscall"
+
+	"golang.org/x/term"
 )
 
 type Column struct {
@@ -27,12 +32,17 @@ var (
 	grid          = [20]string{}
 )
 
-var columns = []Column{}
+var (
+	columns = []Column{}
+	wg      = sync.WaitGroup{}
+)
 
 func main() {
 	initColumns()
 	update()
 	draw()
+
+	wg.Wait()
 }
 
 func initColumns() {
@@ -49,11 +59,11 @@ func initColumns() {
 	done.AddItem("four")
 
 	columns = append(columns, stash, active, done)
-
-	fmt.Println(columns)
 }
 
 func update() {
+	go handleInput()
+
 	for _, column := range columns {
 		title := fmt.Sprintf(format, strings.Join([]string{" ", column.name}, ""))
 		grid[0] = strings.Join([]string{grid[0], title}, separator)
@@ -70,12 +80,41 @@ func update() {
 	}
 }
 
+func handleInput() {
+	wg.Add(1)
+
+	oldState, err := term.MakeRaw(int(syscall.Stdin))
+	if err != nil {
+		fmt.Println("error making terminal raw")
+	}
+	defer term.Restore(int(syscall.Stdin), oldState)
+
+	buf := make([]byte, 1)
+
+	for {
+		_, err := os.Stdin.Read(buf)
+		if err != nil {
+			fmt.Println("error readin input")
+		}
+
+		char := buf[0]
+
+		if char == 'q' {
+			wg.Done()
+			break
+		}
+
+		if char == 'w' {
+			fmt.Println("hhh")
+		}
+	}
+}
+
 func draw() {
 	clearConsole()
 
-	fmt.Println(emptyLine)
-
 	for _, row := range grid {
-		fmt.Println(row)
+		fmt.Print(row)
+		fmt.Print("\r\n")
 	}
 }
