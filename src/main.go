@@ -11,7 +11,8 @@ type Column struct {
 }
 
 type Item struct {
-	value string
+	value   string
+	focused bool
 }
 
 func (column *Column) AddItem(value string) {
@@ -19,9 +20,11 @@ func (column *Column) AddItem(value string) {
 }
 
 var (
-	separator = strings.Repeat(" ", 1)
-	format    = "%-20v"
-	grid      = [20]string{}
+	separator     = strings.Repeat(" ", 1)
+	emptyLine     = strings.Repeat(" ", 80)
+	format        = "%-20v"
+	formatFocused = "%-19v"
+	grid          = [20]string{}
 )
 
 var columns = []Column{}
@@ -37,6 +40,8 @@ func initColumns() {
 	stash.AddItem("one")
 	stash.AddItem("two")
 
+	stash.items[0].focused = true
+
 	active := Column{name: "Active"}
 	active.AddItem("three")
 
@@ -50,11 +55,16 @@ func initColumns() {
 
 func update() {
 	for _, column := range columns {
-		title := fmt.Sprintf(format, column.name)
+		title := fmt.Sprintf(format, strings.Join([]string{" ", column.name}, ""))
 		grid[0] = strings.Join([]string{grid[0], title}, separator)
 
 		for i, item := range column.items {
-			value := fmt.Sprintf(format, item.value)
+			value := fmt.Sprintf(format, strings.Join([]string{" ", item.value}, ""))
+
+			if item.focused {
+				value = strings.Replace(value, " ", ">", 1)
+			}
+
 			grid[1+i] = strings.Join([]string{grid[1+i], value}, separator)
 		}
 	}
@@ -62,6 +72,8 @@ func update() {
 
 func draw() {
 	clearConsole()
+
+	fmt.Println(emptyLine)
 
 	for _, row := range grid {
 		fmt.Println(row)
