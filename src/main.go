@@ -84,8 +84,9 @@ func update() {
 func draw() {
 	clearConsole()
 
-	fmt.Print("  [b]left   [w]right", "\r\n")
-	fmt.Print("  [j]down   [k]up", "\r\n")
+	fmt.Print("[q]quit", "\r\n")
+	fmt.Print("[b]left   [w]right", "\r\n")
+	fmt.Print("[j]down   [k]up", "\r\n")
 	fmt.Print(emptyLine, "\r\n")
 	for _, row := range grid {
 		fmt.Print(row, "\r\n")
