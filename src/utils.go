@@ -9,6 +9,11 @@ import (
 	"golang.org/x/term"
 )
 
+var (
+	focusedColumn = 0
+	focusedItem   = 0
+)
+
 func handleInput() {
 	wg.Add(1)
 
@@ -33,50 +38,17 @@ func handleInput() {
 			break
 		}
 
-		c, i := getFocusedIndexes()
+		focusedColumn, focusedItem = getFocusedIndexes()
 
-		if char == 'w' {
-			nextColumnIndex := c + 1
-
-			if nextColumnIndex < len(columns) {
-				nextItemIndex := i
-				if len(columns[nextColumnIndex].items) <= nextItemIndex {
-					nextItemIndex = len(columns[nextColumnIndex].items) - 1
-				}
-
-				columns[nextColumnIndex].items[nextItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'b' {
-			prevColumnIndex := c - 1
-
-			if prevColumnIndex >= 0 {
-				prevItemIndex := i
-				if len(columns[prevColumnIndex].items) <= prevItemIndex {
-					prevItemIndex = len(columns[prevItemIndex].items) - 1
-				}
-
-				columns[prevColumnIndex].items[prevItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'j' {
-			nextItemIndex := i + 1
-			if nextItemIndex < len(columns[c].items) {
-				columns[c].items[nextItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
-		}
-
-		if char == 'k' {
-			nextItemIndex := i - 1
-			if nextItemIndex >= 0 {
-				columns[c].items[nextItemIndex].focused = true
-				columns[c].items[i].focused = false
-			}
+		switch char {
+		case 'w':
+			moveToColumn(focusedColumn + 1)
+		case 'b':
+			moveToColumn(focusedColumn - 1)
+		case 'j':
+			moveToItem(focusedItem + 1)
+		case 'k':
+			moveToItem(focusedItem - 1)
 		}
 
 		update()
@@ -107,4 +79,24 @@ func getFocusedIndexes() (int, int) {
 	}
 
 	return focusedColumn, focusedItem
+}
+
+func moveToColumn(targetIndex int) {
+	if targetIndex >= 0 && targetIndex < len(columns) {
+		targetItem := focusedItem
+
+		if len(columns[targetIndex].items) <= targetItem {
+			targetItem = len(columns[targetIndex].items) - 1
+		}
+
+		columns[targetIndex].items[targetItem].focused = true
+		columns[focusedColumn].items[focusedItem].focused = false
+	}
+}
+
+func moveToItem(targetIndex int) {
+	if targetIndex >= 0 && targetIndex < len(columns[focusedColumn].items) {
+		columns[focusedColumn].items[targetIndex].focused = true
+		columns[focusedColumn].items[focusedItem].focused = false
+	}
 }
