@@ -37,16 +37,28 @@ func handleInput() {
 
 		if char == 'w' {
 			nextColumnIndex := c + 1
+
 			if nextColumnIndex < len(columns) {
-				columns[nextColumnIndex].items[0].focused = true
+				nextItemIndex := i
+				if len(columns[nextColumnIndex].items) <= nextItemIndex {
+					nextItemIndex = len(columns[nextColumnIndex].items) - 1
+				}
+
+				columns[nextColumnIndex].items[nextItemIndex].focused = true
 				columns[c].items[i].focused = false
 			}
 		}
 
 		if char == 'b' {
-			prevIndex := c - 1
-			if prevIndex >= 0 {
-				columns[prevIndex].items[0].focused = true
+			prevColumnIndex := c - 1
+
+			if prevColumnIndex >= 0 {
+				prevItemIndex := i
+				if len(columns[prevColumnIndex].items) <= prevItemIndex {
+					prevItemIndex = len(columns[prevItemIndex].items) - 1
+				}
+
+				columns[prevColumnIndex].items[prevItemIndex].focused = true
 				columns[c].items[i].focused = false
 			}
 		}
