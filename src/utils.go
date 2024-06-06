@@ -105,13 +105,15 @@ func moveToItem(targetIndex int) {
 }
 
 func deleteItem() {
-	columns[focusedColumn].items = slices.Delete(
-		columns[focusedColumn].items,
+	items := &columns[focusedColumn].items
+
+	*items = slices.Delete(
+		*items,
 		focusedItem,
 		focusedItem+1,
 	)
 
-	if len(columns[focusedColumn].items) > 0 {
-		columns[focusedColumn].items[focusedColumn].focused = true
+	if len(*items) > 0 && len(*items) < focusedItem {
+		(*items)[focusedItem].focused = true
 	}
 }
