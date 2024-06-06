@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"slices"
 	"syscall"
 
 	"golang.org/x/term"
@@ -49,6 +50,8 @@ func handleInput() {
 			moveToItem(focusedItem + 1)
 		case 'k':
 			moveToItem(focusedItem - 1)
+		case 'x':
+			deleteItem()
 		}
 
 		update()
@@ -98,5 +101,17 @@ func moveToItem(targetIndex int) {
 	if targetIndex >= 0 && targetIndex < len(columns[focusedColumn].items) {
 		columns[focusedColumn].items[targetIndex].focused = true
 		columns[focusedColumn].items[focusedItem].focused = false
+	}
+}
+
+func deleteItem() {
+	columns[focusedColumn].items = slices.Delete(
+		columns[focusedColumn].items,
+		focusedItem,
+		focusedItem+1,
+	)
+
+	if len(columns[focusedColumn].items) > 0 {
+		columns[focusedColumn].items[focusedColumn].focused = true
 	}
 }
