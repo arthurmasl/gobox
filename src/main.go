@@ -20,17 +20,17 @@ func (column *Column) AddItem(value string) {
 	column.items = append(column.items, Item{value, false})
 }
 
-var (
-	separator     = strings.Repeat(" ", 1)
-	emptyLine     = strings.Repeat(" ", 80)
-	format        = "%-20v"
-	formatFocused = "%-19v"
-	grid          = [20]string{}
+const (
+	separator = " "
+	empty     = ""
+	format    = "%-20v"
+	br        = "\r\n"
 )
 
 var (
-	columns = []Column{}
 	wg      = sync.WaitGroup{}
+	columns = []Column{}
+	grid    = [20]string{}
 )
 
 func main() {
@@ -48,11 +48,11 @@ func initColumns() {
 	stash := Column{name: "Stash"}
 	stash.AddItem("one")
 	stash.AddItem("two")
-	stash.AddItem("three")
 
 	stash.items[0].focused = true
 
 	active := Column{name: "Active"}
+	active.AddItem("three")
 	active.AddItem("four")
 	active.AddItem("five")
 
@@ -66,17 +66,22 @@ func update() {
 	grid = [20]string{}
 
 	for _, column := range columns {
-		title := fmt.Sprintf(format, strings.Join([]string{"#", column.name}, ""))
+		// draw titles
+		title := fmt.Sprintf(format, strings.Join([]string{"#", column.name}, empty))
 		grid[0] = strings.Join([]string{grid[0], title}, separator)
 
+		// draw items
 		for i, item := range column.items {
-			value := fmt.Sprintf(format, strings.Join([]string{" ", item.value}, ""))
+			value := fmt.Sprintf(
+				format,
+				strings.Join([]string{separator, item.value}, empty),
+			)
 
 			if item.focused {
-				value = strings.Replace(value, " ", ">", 1)
+				value = strings.Replace(value, separator, ">", 1)
 			}
 
-			grid[1+i] = strings.Join([]string{grid[1+i], value}, separator)
+			grid[i+1] = strings.Join([]string{grid[i+1], value}, separator)
 		}
 	}
 }
@@ -84,11 +89,12 @@ func update() {
 func draw() {
 	clearConsole()
 
-	fmt.Print("[q]quit", "\r\n")
-	fmt.Print("[b]left   [w]right", "\r\n")
-	fmt.Print("[j]down   [k]up", "\r\n")
-	fmt.Print(emptyLine, "\r\n")
+	fmt.Print("[q]quit", br)
+	fmt.Print("[b]left   [w]right", br)
+	fmt.Print("[j]down   [k]up", br)
+	fmt.Print(separator, br)
+
 	for _, row := range grid {
-		fmt.Print(row, "\r\n")
+		fmt.Print(row, br)
 	}
 }
