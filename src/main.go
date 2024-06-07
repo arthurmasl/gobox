@@ -47,17 +47,18 @@ func main() {
 func initColumns() {
 	stash := Column{name: "Stash"}
 	stash.AddItem("one")
-	stash.AddItem("two")
+	// stash.AddItem("two")
 
 	stash.items[0].focused = true
 
 	active := Column{name: "Active"}
 	active.AddItem("three")
 	active.AddItem("four")
-	active.AddItem("five")
 
 	done := Column{name: "Done"}
 	done.AddItem("six")
+	done.AddItem("four")
+	done.AddItem("five")
 
 	columns = append(columns, stash, active, done)
 }
@@ -65,13 +66,13 @@ func initColumns() {
 func update() {
 	grid = [20]string{}
 
-	for _, column := range columns {
+	for columnIndex, column := range columns {
 		// draw titles
 		title := fmt.Sprintf(format, strings.Join([]string{"#", column.name}, empty))
 		grid[0] = strings.Join([]string{grid[0], title}, separator)
 
 		// draw items
-		for i, item := range column.items {
+		for itemIndex, item := range column.items {
 			value := fmt.Sprintf(
 				format,
 				strings.Join([]string{separator, item.value}, empty),
@@ -81,7 +82,8 @@ func update() {
 				value = strings.Replace(value, separator, ">", 1)
 			}
 
-			grid[i+1] = strings.Join([]string{grid[i+1], value}, separator)
+			grid[itemIndex+1] = strings.Join([]string{grid[itemIndex+1], value}, separator)
+			expandSpaces(columnIndex, itemIndex)
 		}
 	}
 }
