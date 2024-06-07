@@ -75,12 +75,8 @@ func update() {
 		for itemIndex, item := range column.items {
 			value := fmt.Sprintf(
 				format,
-				strings.Join([]string{separator, item.value}, empty),
+				strings.Join([]string{getPrefix(&item), item.value}, empty),
 			)
-
-			if item.focused {
-				value = strings.Replace(value, separator, ">", 1)
-			}
 
 			grid[itemIndex+1] = strings.Join([]string{grid[itemIndex+1], value}, separator)
 			expandSpaces(columnIndex, itemIndex)

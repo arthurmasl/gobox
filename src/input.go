@@ -106,7 +106,12 @@ func deleteItem() {
 		focusedItem+1,
 	)
 
-	if len(*items) > 0 && len(*items) < focusedItem {
-		(*items)[focusedItem].focused = true
+	if len(*items) == 0 {
+		return
 	}
+	if focusedItem >= len(*items) {
+		(*items)[len(*items)-1].focused = true
+		return
+	}
+	(*items)[focusedItem].focused = true
 }
