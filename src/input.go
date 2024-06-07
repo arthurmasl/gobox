@@ -49,6 +49,10 @@ func handleInput() {
 			moveToItem(focusedItem + 1)
 		case 'k':
 			moveToItem(focusedItem - 1)
+		case 'h':
+			moveItem(focusedColumn - 1)
+		case 'l':
+			moveItem(focusedColumn + 1)
 		case 'x':
 			deleteItem()
 		}
@@ -114,4 +118,8 @@ func deleteItem() {
 		return
 	}
 	(*items)[focusedItem].focused = true
+}
+
+func moveItem(targetIndex int) {
+	// TODO
 }
