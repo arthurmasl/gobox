@@ -31,7 +31,7 @@ const (
 var (
 	wg      = sync.WaitGroup{}
 	columns = []Column{}
-	grid    = [20]string{}
+	grid    = [10]string{}
 )
 
 func main() {
@@ -65,7 +65,7 @@ func initColumns() {
 }
 
 func update() {
-	grid = [20]string{}
+	grid = [10]string{}
 
 	for columnIndex, column := range columns {
 		// draw titles
