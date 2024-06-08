@@ -82,7 +82,8 @@ func getFocusedIndexes() (int, int) {
 }
 
 func moveToColumn(targetIndex int) {
-	if targetIndex >= 0 && targetIndex < len(columns) {
+	if targetIndex >= 0 && targetIndex < len(columns) &&
+		len(columns[targetIndex].items) > 0 {
 		targetItem := focusedItem
 
 		if len(columns[targetIndex].items) <= targetItem {
