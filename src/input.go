@@ -110,6 +110,12 @@ func deleteItem() {
 		focusedItem+1,
 	)
 
+	updateCursor()
+}
+
+func updateCursor() {
+	items := &columns[focusedColumn].items
+
 	if len(*items) == 0 {
 		return
 	}
@@ -121,5 +127,20 @@ func deleteItem() {
 }
 
 func moveItem(targetIndex int) {
-	// TODO
+	if targetIndex > 2 && focusedColumn == 2 || targetIndex < 0 && focusedColumn == 0 {
+		return
+	}
+
+	columns[focusedColumn].items[focusedItem].focused = false
+	columns[targetIndex].items = append(
+		columns[targetIndex].items,
+		columns[focusedColumn].items[focusedItem],
+	)
+	columns[focusedColumn].items = slices.Delete(
+		columns[focusedColumn].items,
+		focusedItem,
+		focusedItem+1,
+	)
+
+	updateCursor()
 }
