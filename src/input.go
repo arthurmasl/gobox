@@ -12,6 +12,7 @@ import (
 var (
 	focusedColumn = 0
 	focusedItem   = 0
+	inputMode     = false
 )
 
 func handleInput() {
@@ -23,12 +24,18 @@ func handleInput() {
 	}
 	defer term.Restore(int(syscall.Stdin), oldState)
 
-	buf := make([]byte, 1)
+	buf := make([]byte, 1024)
 
 	for {
 		_, err := os.Stdin.Read(buf)
 		if err != nil {
 			fmt.Println("error reading input")
+		}
+
+		if inputMode {
+			addItem(string(buf))
+			oldState, _ = term.MakeRaw(int(syscall.Stdin))
+			inputMode = false
 		}
 
 		char := buf[0]
@@ -55,6 +62,11 @@ func handleInput() {
 			moveItem(focusedColumn + 1)
 		case 'x':
 			deleteItem()
+
+		case 'a':
+			term.Restore(int(syscall.Stdin), oldState)
+			inputMode = true
+
 		}
 
 		update()
@@ -144,4 +156,9 @@ func moveItem(targetIndex int) {
 	)
 
 	updateCursor()
+}
+
+func addItem(value string) {
+	columns[focusedColumn].items[focusedItem].focused = false
+	columns[focusedColumn].items = append(columns[focusedColumn].items, Item{value, true})
 }
