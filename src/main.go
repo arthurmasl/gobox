@@ -57,9 +57,9 @@ func initColumns() {
 	// active.AddItem("four")
 
 	done := Column{name: "Done"}
-	done.AddItem("six")
 	done.AddItem("four")
 	done.AddItem("five")
+	done.AddItem("six")
 
 	columns = append(columns, stash, active, done)
 }

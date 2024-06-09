@@ -28,7 +28,7 @@ func handleInput() {
 	for {
 		_, err := os.Stdin.Read(buf)
 		if err != nil {
-			fmt.Println("error readin input")
+			fmt.Println("error reading input")
 		}
 
 		char := buf[0]
