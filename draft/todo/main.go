@@ -102,6 +102,7 @@ func draw() {
 	fmt.Print("[b]left        [w]right", br)
 	fmt.Print("[j]down        [k]up", br)
 	fmt.Print("[h]move left   [l]move right", br)
+	fmt.Print("[a]new item    [x]delete", br)
 	fmt.Print(separator, br)
 
 	for _, row := range grid {
