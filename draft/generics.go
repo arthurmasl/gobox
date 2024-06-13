@@ -23,8 +23,29 @@ func MapKeys[K comparable, V any](m map[K]V) []K {
 	return r
 }
 
-func main() {
-	m := map[int]string{1: "1", 2: "2"}
+type Player struct {
+	hp int
+}
 
-	fmt.Printf("%#v", MapKeys(m))
+type Enemy struct {
+	mp int
+}
+
+func UpdateEntity(entity interface{}) {
+	switch t := entity.(type) {
+	case Player:
+		fmt.Println("pl", t)
+	case Enemy:
+		fmt.Println("en", t)
+
+	}
+	fmt.Printf("%#v\n", entity)
+}
+
+func main() {
+	player := Player{}
+	enemy := Enemy{}
+
+	UpdateEntity(player)
+	UpdateEntity(enemy)
 }
