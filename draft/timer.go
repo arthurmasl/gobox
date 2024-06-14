@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
 	"time"
 )
 
 func main() {
-	ticker := time.NewTicker(time.Microsecond * 200)
+	rr := 85
+	ticker := time.NewTicker(time.Second)
 	done := make(chan bool)
 
 	go func() {
@@ -14,14 +17,16 @@ func main() {
 			select {
 			case <-done:
 				return
-			case t := <-ticker.C:
-				fmt.Println("tick at", t)
+			case <-ticker.C:
+				cmd := exec.Command("clear")
+				cmd.Stdout = os.Stdout
+				cmd.Run()
+				rr += 5
+				fmt.Printf("%v\n", rr)
 			}
 		}
 	}()
 
-	// time.Sleep(1600 * time.Millisecond)
-	// ticker.Stop()
 	<-done
 	fmt.Println("stop")
 }
