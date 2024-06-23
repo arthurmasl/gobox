@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"net"
 )
 
 func main() {
-	dat, err := os.ReadFile("test.txt")
+	listener, err := net.Listen("tcp", ":8000")
 	if err != nil {
-		panic(err)
+		panic("Error starting server" + err.Error())
 	}
+	defer listener.Close()
 
-	fmt.Println(string(dat))
+	fmt.Println("server started on port 8000")
 }
