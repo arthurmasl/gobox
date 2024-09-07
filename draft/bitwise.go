@@ -6,9 +6,9 @@ import (
 )
 
 var (
-	READONLY = 1
-	HIDDEN   = 2
-	ARCHIVE  = 10
+	READONLY = 0x1
+	HIDDEN   = 0x2
+	ARCHIVE  = 0x10
 )
 
 func getBitValue(num, n int) int {
