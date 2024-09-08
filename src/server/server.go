@@ -40,6 +40,6 @@ func handleClient(conn net.Conn) {
 			return
 		}
 
-		fmt.Printf("Received: %s\n", buffer[:n])
+		fmt.Printf("Received: %s", buffer[:n])
 	}
 }

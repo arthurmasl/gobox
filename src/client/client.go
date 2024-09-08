@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
+	"os"
 )
 
 func main() {
@@ -17,11 +19,15 @@ func main() {
 }
 
 func sendData(conn net.Conn) {
-	data := []byte("hello, server")
+	reader := bufio.NewReader(os.Stdin)
 
-	_, err := conn.Write(data)
-	if err != nil {
-		fmt.Println("data error", err)
-		return
+	for {
+		msg, err := reader.ReadString('\n')
+		if err != nil {
+			fmt.Println("read string error", err)
+			return
+		}
+
+		conn.Write([]byte(msg))
 	}
 }
