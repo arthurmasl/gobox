@@ -32,8 +32,8 @@ func main() {
 
 		// collect seeds
 		if index == 0 {
-			chunks := strings.Split(line, " ")[1:]
-			for _, chunk := range chunks {
+			chunks := strings.Split(line, " ")
+			for _, chunk := range chunks[1:] {
 				seed, _ := strconv.Atoi(chunk)
 				seeds = append(seeds, seed)
 			}
@@ -62,5 +62,6 @@ func main() {
 		index++
 	}
 
+	fmt.Printf("%v\n", seeds)
 	fmt.Printf("%v\n", groups)
 }
