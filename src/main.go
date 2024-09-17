@@ -1,67 +1,61 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-	"strconv"
-	"strings"
-)
+import "fmt"
 
-type PlantMap struct {
-	destination int
-	source      int
-	length      int
+type Stack struct {
+	elements []string
 }
 
-var (
-	seeds  []int
-	groups [][]PlantMap
-)
+type Stacker interface {
+	Push()
+	Pop()
+	Peek()
+	IsEmpty()
+	Size()
+}
 
-func main() {
-	dat, _ := os.ReadFile("src/input.txt")
-	text := string(dat)
+func (s *Stack) Push(value string) {
+	s.elements = append(s.elements, value)
+}
 
-	scanner := bufio.NewScanner(strings.NewReader(text))
-	index := 0
-	groupIndex := 0
-
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		// collect seeds
-		if index == 0 {
-			chunks := strings.Split(line, " ")
-			for _, chunk := range chunks[1:] {
-				seed, _ := strconv.Atoi(chunk)
-				seeds = append(seeds, seed)
-			}
-		}
-
-		// create group
-		if strings.Contains(line, "map:") {
-			groupIndex++
-			groups = append(groups, []PlantMap{})
-			continue
-		}
-
-		// fill group
-		if groupIndex > 0 && len(line) > 0 {
-			nums := strings.Split(line, " ")
-
-			destination, _ := strconv.Atoi(nums[0])
-			source, _ := strconv.Atoi(nums[1])
-			length, _ := strconv.Atoi(nums[2])
-
-			plantMap := PlantMap{destination, source, length}
-
-			groups[groupIndex-1] = append(groups[groupIndex-1], plantMap)
-		}
-
-		index++
+func (s *Stack) Pop() (string, bool) {
+	if s.IsEmpty() {
+		return "", false
 	}
 
-	fmt.Printf("%v\n", seeds)
-	fmt.Printf("%v\n", groups)
+	value := s.elements[len(s.elements)-1]
+	s.elements = s.elements[:len(s.elements)-1]
+
+	return value, true
+}
+
+func (s *Stack) Peek() (string, bool) {
+	if s.IsEmpty() {
+		return "", false
+	}
+
+	value := s.elements[len(s.elements)-1]
+
+	return value, true
+}
+
+func (s *Stack) Size() int {
+	return len(s.elements)
+}
+
+func (s *Stack) IsEmpty() bool {
+	return len(s.elements) == 0
+}
+
+func main() {
+	cars := &Stack{}
+
+	cars.Push("bnw")
+	cars.Push("audi")
+	cars.Pop()
+
+	fmt.Println(cars.Size())
+	fmt.Println(cars.Peek())
+
+	fmt.Println(cars.elements)
 }
