@@ -1,61 +1,40 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"strings"
+)
 
-type Stack struct {
-	elements []string
-}
+type Data map[string]string
 
-type Stacker interface {
-	Push()
-	Pop()
-	Peek()
-	IsEmpty()
-	Size()
-}
-
-func (s *Stack) Push(value string) {
-	s.elements = append(s.elements, value)
-}
-
-func (s *Stack) Pop() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
+func check(e error) {
+	if e != nil {
+		panic(e)
 	}
-
-	value := s.elements[len(s.elements)-1]
-	s.elements = s.elements[:len(s.elements)-1]
-
-	return value, true
-}
-
-func (s *Stack) Peek() (string, bool) {
-	if s.IsEmpty() {
-		return "", false
-	}
-
-	value := s.elements[len(s.elements)-1]
-
-	return value, true
-}
-
-func (s *Stack) Size() int {
-	return len(s.elements)
-}
-
-func (s *Stack) IsEmpty() bool {
-	return len(s.elements) == 0
 }
 
 func main() {
-	cars := &Stack{}
+	file, err := os.ReadFile("src/data/users.amdb")
+	check(err)
 
-	cars.Push("bnw")
-	cars.Push("audi")
-	cars.Pop()
+	text := string(file[:len(file)-1])
+	lines := strings.Split(text, "\n")
+	rows := strings.Split(lines[0], " ")
+	data := lines[1:]
 
-	fmt.Println(cars.Size())
-	fmt.Println(cars.Peek())
+	dataSlice := make([]Data, len(data))
 
-	fmt.Println(cars.elements)
+	for colIndex, col := range data {
+		colData := strings.Split(col, " ")
+		colMap := make(Data)
+
+		for rowIndex, row := range rows {
+			colMap[row] = colData[rowIndex]
+		}
+
+		dataSlice[colIndex] = colMap
+	}
+
+	fmt.Printf("%+v\n", dataSlice)
 }
