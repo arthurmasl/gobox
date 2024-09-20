@@ -9,6 +9,10 @@
   </ul>
 </component>
 
+<component name="Title">
+  <h3>Hello title</h3>
+</component>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -19,6 +23,7 @@
   <style>
     body {
       background: #333;
+      color: #fff;
     }
   </style>
 
@@ -30,7 +35,12 @@
 
     <p>test</p>
 
-    <List />
+    <Title />
+
+    <Title />
+
+    <p>test2</p>
+
     <List />
   </body>
 </html>

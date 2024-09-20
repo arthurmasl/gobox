@@ -4,63 +4,99 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode/utf8"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
+type Component struct {
+	from       int
+	to         int
+	name       string
+	data       string
+	insertions *[]int
 }
 
+const (
+	COMPONENT_START    = "<component"
+	COMPONENT_END      = "</component>"
+	COMPONENT_TEMPLATE = "<%s />"
+)
+
+var (
+	fileInput  = "src/input/index.ahtml"
+	fileOutput = "src/output/index.html"
+)
+
 func main() {
-	file, err := os.ReadFile("src/input/index.ahtml")
+	file, err := os.ReadFile(fileInput)
 	check(err)
 
 	text := string(file[:len(file)-1])
 	lines := strings.Split(text, "\n")
 
-	var start int
-	var end int
+	var components []Component
 	var name string
-
-	var insertions []int
-
-	result := lines
+	var from int
 
 	for i, line := range lines {
-		if strings.Contains(line, "<component name=") {
-			start = i
-			nameStart := strings.Index(line, "name=\"") + 6
-			nameEnd := strings.Index(line[nameStart:], "\"")
-			name = line[nameStart : nameStart+nameEnd]
+		// get components
+		if strings.Contains(line, COMPONENT_START) {
+			from = i
+			name = getProperty(line, "name")
 			continue
 		}
 
-		if strings.Contains(line, "</component>") {
-			end = i
-			continue
+		if strings.Contains(line, COMPONENT_END) {
+			insertions := make([]int, 0)
+			component := Component{
+				name:       name,
+				from:       from,
+				to:         i,
+				data:       strings.Join(lines[from+1:i], "\n"),
+				insertions: &insertions,
+			}
+			components = append(components, component)
 		}
 
-		if strings.Contains(line, fmt.Sprintf("<%s />", name)) {
-			insertions = append(insertions, i)
-
-			continue
+		// get insertions
+		for _, c := range components {
+			if strings.Contains(line, fmt.Sprintf(COMPONENT_TEMPLATE, c.name)) {
+				*c.insertions = append(*c.insertions, i)
+			}
 		}
 	}
 
-	component := strings.Join(lines[start+1:end], "\n")
+	// insert
+	for _, c := range components {
+		for _, i := range *c.insertions {
+			bef := lines[:i]
+			aft := lines[i+1:]
 
-	for _, i := range insertions {
-		bef := result[:i]
-		aft := result[i+1:]
-
-		result = append(bef, component)
-		result = append(result, aft...)
+			lines = append(bef, c.data)
+			lines = append(lines, aft...)
+		}
 	}
 
-	result = result[end+1:]
+	// remove components
+	lines = lines[components[len(components)-1].to+2:]
 
-	data := []byte(strings.Join(result, "\n"))
-	writeErr := os.WriteFile("./src/output/index.html", data, 0644)
+	data := []byte(strings.Join(lines, "\n"))
+	writeErr := os.WriteFile(fileOutput, data, 0644)
 	check(writeErr)
+}
+
+func getProperty(line string, name string) string {
+	postfixLen := 2
+	propertyLen := utf8.RuneCountInString(name) + postfixLen
+
+	nameStart := strings.Index(line, fmt.Sprintf("%s=\"", name)) + propertyLen
+	nameEnd := strings.Index(line[nameStart:], "\"")
+	property := line[nameStart : nameStart+nameEnd]
+
+	return property
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
