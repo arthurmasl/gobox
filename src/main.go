@@ -27,8 +27,8 @@ var (
 )
 
 func main() {
-	file, err := os.ReadFile(fileInput)
-	check(err)
+	file, readErr := os.ReadFile(fileInput)
+	check(readErr)
 
 	text := string(file[:len(file)-1])
 	lines := strings.Split(text, "\n")
@@ -58,20 +58,20 @@ func main() {
 		}
 
 		// get insertions
-		for _, c := range components {
-			if strings.Contains(line, fmt.Sprintf(COMPONENT_TEMPLATE, c.name)) {
-				*c.insertions = append(*c.insertions, i)
+		for _, component := range components {
+			if strings.Contains(line, fmt.Sprintf(COMPONENT_TEMPLATE, component.name)) {
+				*component.insertions = append(*component.insertions, i)
 			}
 		}
 	}
 
 	// insert
-	for _, c := range components {
-		for _, i := range *c.insertions {
+	for _, component := range components {
+		for _, i := range *component.insertions {
 			bef := lines[:i]
 			aft := lines[i+1:]
 
-			lines = append(bef, c.data)
+			lines = append(bef, component.data)
 			lines = append(lines, aft...)
 		}
 	}
