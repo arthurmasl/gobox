@@ -1,0 +1,138 @@
+[
+  {
+    "name": "Grybų",
+    "description": "Picų padažas, sūris, pievagrybiai."
+  },
+  {
+    "name": "Kaimiška",
+    "description": "Picų padažas, sūris, karšto rūkymo šoninė, pievagrybiai, svogūnai."
+  },
+  {
+    "name": "Mafijos",
+    "description": "Picų padažas, sūris, karšto rūkymo šoninė, saliamis, pievagrybiai, pomidorai, alyvuogės."
+  },
+  {
+    "name": "Havajų",
+    "description": "Picų padažas, sūris, virtas kumpis, ananasai."
+  },
+  {
+    "name": "Sočioji",
+    "description": "Picų padažas, sūris, virtas kumpis, karšto rūkymo šoninė, svogūnai, česnakinis padažas."
+  },
+  {
+    "name": "Su krevetėm",
+    "description": "Picų padažas, sūris, krevetės, marinuoti agurkėliai, vyšniniai pomidorai."
+  },
+  {
+    "name": "Margarita",
+    "description": "Picų padažas, sūris, Mocarela sūris."
+  },
+  {
+    "name": "Ypatingoji",
+    "description": "Picų padažas, sūris, faršas, virtas kumpis, marinuoti svogūnėliai, jalapenai, peperoni pipirai."
+  },
+  {
+    "name": "Vezuvijaus",
+    "description": "Picų padažas, sūris, virtas kumpis, pomidorai."
+  },
+  {
+    "name": "Vegetariška",
+    "description": "Picų padažas, sūris, pievagrybiai, paprika, pomidorai, vyšniniai pomidorai, alyvuogės, marinuoti agurkėliai."
+  },
+  {
+    "name": "Ugninė",
+    "description": "Picų padažas, aštrus padažas, sūris, faršas, karšto rūkymo šoninė, jelapenas, piripiri pipirai, peperoni pipirai."
+  },
+  {
+    "name": "Tuno",
+    "description": "Picų padažas, sūris, tunas, citrina, svogūnai."
+  },
+  {
+    "name": "Toro",
+    "description": "Picų padažas, sūris, faršas, rūkyta jautiena, svogūnai, alyvuogės."
+  },
+  {
+    "name": "Su vištiena",
+    "description": "Picų padažas, sūris, vištiena, svogūnai, peperoni pipirai, BBQ padažas."
+  },
+  {
+    "name": "Su vištiena aštri",
+    "description": "Picų padažas, sūris, vištiena, pupelės, kelmučiai, jalapenai."
+  },
+  {
+    "name": "Su saliamiu",
+    "description": "Picų padažas, sūris, saliamis, paprika, pievagrybiai, alyvuogės, vyšniniai pomidorai."
+  },
+  {
+    "name": "Su jautiena",
+    "description": "Picų padažas, sūris, rūkyta jautiena, pievagrybiai, marinuoti agurkėliai, marinuoti svogūnėliai, peperoni pipirai."
+  },
+  {
+    "name": "Su jautiena aštri",
+    "description": "Picų padažas, sūris, jautiena, paprika, aštrus padažas."
+  },
+  {
+    "name": "Su feta",
+    "description": "Picų padažas, sūris, fetos sūris, saulėje džiovinti pomidorai, špinatai, žolelių padažas."
+  },
+  {
+    "name": "Studentų",
+    "description": "Picų padažas, sūris, dešrelės, virtas kumpis, marinuoti agurkėliai."
+  },
+  {
+    "name": "Special",
+    "description": "Picų padažas, sūris, karšto rūkymo šoninė, virtas kumpis, kelmučiai, marinuoti svogūnėliai, vyšniniai pomidorai."
+  },
+  {
+    "name": "Skanioji",
+    "description": "Picų padažas, sūris, faršas, vištiena, marinuoti agurkėliai, alyvuogės, česnakinis padažas."
+  },
+  {
+    "name": "Sicilija",
+    "description": "Picų padažas, sūris, karšto rūkymo šoninė, vištiena, pievagrybiai, BBQ padažas."
+  },
+  {
+    "name": "Serrano",
+    "description": "Picų padažas, sūris, Serrano kumpis, Moccarela sūris, pomidorai, gražgarstės, campino ir pesto padažai."
+  },
+  {
+    "name": "Moksleivių",
+    "description": "Picų padažas, sūris, virtas kumpis, pievagrybiai."
+  },
+  {
+    "name": "Meksika",
+    "description": "Picų padažas, sūris, faršas, porai, kons. pupelės, kons. kukurūzai, aštrus padažas."
+  },
+  {
+    "name": "Keturių sūrių",
+    "description": "Česnakinis padažas, Mocarella sūris, fetos sūris, pelėsinis sūris, špinatai."
+  },
+  {
+    "name": "Kaprio",
+    "description": "Picų padažas, sūris, karšto rūkymo šoninė, kelmučiai, svogūnai."
+  },
+  {
+    "name": "Korida",
+    "description": "Picų padažas, sūris, Serrano kumpis, špinatai, svogūnai, kietasis sūris, saulėje džiovinti pomidorai, Campino ir Pesto padažai."
+  },
+  {
+    "name": "Gurmanų",
+    "description": "Picų padažas, sūris, kons. pupelės ir kukurūzai, porai, pievagrybiai, saulėje džiovinti pomidorai, kaparėliai."
+  },
+  {
+    "name": "Egzotika",
+    "description": "Picų padažas, sūris, vištiena, ananasai, saldžiarūgštis padažas."
+  },
+  {
+    "name": "Česnakinė",
+    "description": "Picų padažas, sūris, virtas kumpis, rūkyta jautiena, pievagrybiai."
+  },
+  {
+    "name": "Boso",
+    "description": "Picų padažas, sūris, virtas kumpis, saliamis, paprika, svogūnai."
+  },
+  {
+    "name": "BBQ aštrioji",
+    "description": "Picų padažas, sūris, faršas, marinuoti agurkėliai, jelapenas, BBQ padažas."
+  }
+]
