@@ -13,7 +13,24 @@ func TestSummy(t *testing.T) {
 		want    int
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "sum",
+			args:    args{5, 1},
+			want:    6,
+			wantErr: false,
+		},
+		{
+			name:    "sum2",
+			args:    args{5, 15},
+			want:    20,
+			wantErr: false,
+		},
+		{
+			name:    "err",
+			args:    args{505, 15},
+			want:    -1,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
