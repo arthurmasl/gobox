@@ -11,10 +11,10 @@ const COUNT = 3
 type User struct {
 	name    string
 	balance int
-	store   [1024]byte
+	store   [1024 * 10]byte
 }
 
-var store [1024]byte
+var store [1024 * 10]byte
 
 func NewUserP(name string, balance int) *User {
 	return &User{name, balance, store}
