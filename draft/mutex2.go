@@ -12,8 +12,8 @@ type Command struct {
 
 type Commands struct {
 	mutex sync.Mutex
-	queue []Command
 	wg    sync.WaitGroup
+	queue []Command
 }
 
 type Commander interface {
