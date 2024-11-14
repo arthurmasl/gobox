@@ -1,20 +1,34 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
+
+type Set struct {
+	data map[string]bool
+}
+
+func NewSet() *Set {
+	return &Set{data: make(map[string]bool)}
+}
+
+func (set *Set) add(target string) {
+	set.data[target] = true
+}
+
+func (set *Set) delete(target string) {
+	delete(set.data, target)
+}
 
 func main() {
-	b1 := uint8(0b00000100)
+	fruits := NewSet()
 
-	fmt.Printf("toggle %08b\n", b1^(1<<2))
+	fruits.add("apple")
+	fruits.add("apple")
+	fruits.add("grape")
+	fruits.delete("grape22")
 
-	// set
-	fmt.Printf("set %08b\n", b1|(1<<0))
+	fmt.Println(len(fruits.data))
 
-	// clear
-	fmt.Printf("clear %08b\n", b1&^(1<<2))
-
-	// check
-	fmt.Println("check", (b1&(1<<2)) != 0)
+	for fruit := range fruits.data {
+		fmt.Println(fruit)
+	}
 }
