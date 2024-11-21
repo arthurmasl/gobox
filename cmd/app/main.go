@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	file, _ := os.Open("cmd/app/testdata.txt")
+	file, _ := os.Open("cmd/app/measurements.txt")
 	defer file.Close()
 
 	execute(file)
