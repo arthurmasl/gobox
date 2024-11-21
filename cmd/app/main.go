@@ -1,68 +1,47 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"slices"
-	"strconv"
-	"strings"
 	"time"
+
+	"gobox/cmd/internal/solutions"
+)
+
+type Solution struct {
+	name   string
+	rows   int
+	cities int
+}
+
+var (
+	small   = Solution{rows: 12, name: "small", cities: 10}
+	tenmil  = Solution{rows: 10_000_000, name: "tenmils", cities: 413}
+	billion = Solution{rows: 1_000_000_000, name: "billion", cities: 413}
+)
+
+var (
+	solutionFn   = solutions.Solution2
+	solutionCase = tenmil
 )
 
 func main() {
-	file, _ := os.Open("cmd/app/testdata2.txt")
-	// file, _ := os.Open("cmd/app/measurements.txt")
+	ExecuteSolution(solutionCase)
+}
+
+func ExecuteSolution(solution Solution) (string, int) {
+	file, _ := os.Open(fmt.Sprintf("cmd/app/%v.txt", solution.name))
 	defer file.Close()
 
+	fmt.Printf("Name: %v, Rows: %v\n", solution.name, solution.rows)
+
 	t1 := time.Now()
-	execute(file)
-	fmt.Println(time.Since(t1))
-}
-
-type Data struct {
-	min, max, sum float64
-	count         int64
-}
-
-func execute(file *os.File) string {
-	scanner := bufio.NewScanner(file)
-	data := make(map[string]*Data)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		parts := strings.Split(line, ";")
-		name := parts[0]
-		temp, _ := strconv.ParseFloat(parts[1], 64)
-
-		d := data[name]
-		if d == nil {
-			data[name] = &Data{
-				min:   temp,
-				max:   temp,
-				sum:   temp,
-				count: 1,
-			}
-		} else {
-			d.min = min(d.min, temp)
-			d.max = max(d.min, temp)
-			d.sum += temp
-			d.count++
-		}
-
+	str, cities := solutionFn(file, solution.rows)
+	if cities != solution.cities {
+		fmt.Printf("-Wrong solution!, got %v cities, when expected %v\n", cities, solution.cities)
 	}
+	fmt.Printf("Cities: %v, Expected: %v\n", cities, solution.cities)
+	fmt.Printf("Execution time: %v\n", time.Since(t1))
 
-	index := 0
-	strs := make([]string, len(data))
-
-	for key, value := range data {
-		mean := value.sum / float64(value.count)
-		strs[index] = fmt.Sprintf("%v=%v/%v/%v", key, value.min, mean, value.max)
-		index++
-	}
-
-	slices.Sort(strs)
-	result := fmt.Sprintf("{%v}", strings.Join(strs, ", "))
-
-	return result
+	return str, cities
 }
