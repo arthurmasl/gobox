@@ -43,8 +43,7 @@ func Solution2(file *os.File, rows int) (string, int) {
 		}()
 	}
 
-	var lines []string
-
+	lines := make([]string, 0, chunkSize)
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 
