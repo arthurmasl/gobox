@@ -1,9 +1,7 @@
 package main
 
-import (
-	"gobox/internal/executor"
-)
+import "fmt"
 
 func main() {
-	executor.ExecuteSolution(executor.SolutionCase)
+	fmt.Println("hello")
 }
