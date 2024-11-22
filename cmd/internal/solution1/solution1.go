@@ -1,4 +1,4 @@
-package solutions
+package solution1
 
 import (
 	"bufio"
@@ -9,13 +9,13 @@ import (
 	"strings"
 )
 
-type data1 struct {
+type Data struct {
 	min, max, sum float64
 	count         int64
 }
 
-func Solution1(file *os.File, rows int) (string, int) {
-	data := make(map[string]*data1)
+func Execute(file *os.File, rows int) (string, int) {
+	data := make(map[string]*Data)
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
@@ -26,7 +26,7 @@ func Solution1(file *os.File, rows int) (string, int) {
 
 		d, ok := data[name]
 		if !ok {
-			data[name] = &data1{
+			data[name] = &Data{
 				min:   temp,
 				max:   temp,
 				sum:   temp,

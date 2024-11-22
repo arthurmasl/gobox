@@ -1,4 +1,4 @@
-package solutions
+package solution2
 
 import (
 	"bufio"
@@ -11,9 +11,16 @@ import (
 	"sync"
 )
 
-func Solution2(file *os.File, rows int) (string, int) {
-	bufferSize := 2048 * 2048
+type DataMap map[string]*Data
 
+type Data struct {
+	min, max, sum float64
+	count         int64
+}
+
+const BUFFER_SIZE = 2048 * 2048
+
+func Execute(file *os.File, rows int) (string, int) {
 	wg := sync.WaitGroup{}
 	mu := sync.Mutex{}
 	data := make(DataMap)
@@ -24,21 +31,22 @@ func Solution2(file *os.File, rows int) (string, int) {
 
 	fmt.Printf("Workers: %v, Chunk Size: %v\n", workers, chunkSize)
 
-	scanner := bufio.NewScanner(file)
-	scanner.Buffer(make([]byte, bufferSize), bufferSize)
-
 	for range workers {
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 			for chunk := range chunks {
-				processChunk2(chunk, &data, &mu)
+				processChunk(chunk, &data, &mu)
 			}
 		}()
 	}
 
 	lines := make([]string, 0, chunkSize)
+
+	scanner := bufio.NewScanner(file)
+	scanner.Buffer(make([]byte, BUFFER_SIZE), BUFFER_SIZE)
+
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 
@@ -71,7 +79,7 @@ func Solution2(file *os.File, rows int) (string, int) {
 	return result, len(data)
 }
 
-func processChunk2(lines []string, data *DataMap, mu *sync.Mutex) {
+func processChunk(lines []string, data *DataMap, mu *sync.Mutex) {
 	// mu.Lock()
 	// defer mu.Unlock()
 

@@ -5,7 +5,8 @@ import (
 	"os"
 	"time"
 
-	"gobox/cmd/internal/solutions"
+	"gobox/cmd/internal/solution1"
+	"gobox/cmd/internal/solution2"
 )
 
 type Solution struct {
@@ -21,11 +22,13 @@ var (
 )
 
 var (
-	solutionFn   = solutions.Solution3
+	solutionFn   = solution2.Execute
 	solutionCase = tenmil
 )
 
 func main() {
+	fmt.Fprintln(os.Stdout, []any{solution1.Execute, solution2.Execute}...)
+
 	ExecuteSolution(solutionCase)
 }
 
