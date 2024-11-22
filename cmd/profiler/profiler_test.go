@@ -1,11 +1,11 @@
-package main
+package profiler
 
 import (
 	"os"
 	"testing"
 
-	"gobox/cmd/internal/solution1"
-	"gobox/cmd/internal/solution2"
+	"gobox/internal/solution1"
+	"gobox/internal/solution2"
 )
 
 var (
