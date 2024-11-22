@@ -15,8 +15,8 @@ type data1 struct {
 }
 
 func Solution1(file *os.File, rows int) (string, int) {
-	scanner := bufio.NewScanner(file)
 	data := make(map[string]*data1)
+	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -24,8 +24,8 @@ func Solution1(file *os.File, rows int) (string, int) {
 		name := parts[0]
 		temp, _ := strconv.ParseFloat(parts[1], 64)
 
-		d := data[name]
-		if d == nil {
+		d, ok := data[name]
+		if !ok {
 			data[name] = &data1{
 				min:   temp,
 				max:   temp,
@@ -33,8 +33,13 @@ func Solution1(file *os.File, rows int) (string, int) {
 				count: 1,
 			}
 		} else {
-			d.min = min(d.min, temp)
-			d.max = max(d.min, temp)
+			if temp < d.min {
+				d.min = temp
+			}
+			if temp > d.max {
+				d.max = temp
+			}
+
 			d.sum += temp
 			d.count++
 		}

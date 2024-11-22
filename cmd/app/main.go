@@ -21,7 +21,7 @@ var (
 )
 
 var (
-	solutionFn   = solutions.Solution2
+	solutionFn   = solutions.Solution3
 	solutionCase = tenmil
 )
 
