@@ -6,5 +6,7 @@ bench:
 
 test:
 	@go test ./cmd/app/... -v
-	@make bench
 
+profile:
+	@make run
+	@go tool pprof -http 127.0.0.1:8080 cpu_profile.prof

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime/pprof"
 	"time"
 
 	"gobox/cmd/internal/solution1"
@@ -28,6 +29,17 @@ var (
 
 func main() {
 	fmt.Fprintln(os.Stdout, []any{solution1.Execute, solution2.Execute}...)
+
+	f, err := os.Create("cpu_profile.prof")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	if err := pprof.StartCPUProfile(f); err != nil {
+		panic(err)
+	}
+	defer pprof.StopCPUProfile()
 
 	ExecuteSolution(solutionCase)
 }
