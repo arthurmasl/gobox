@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"runtime/pprof"
+	"time"
 )
 
 func Profile() func() {
@@ -22,5 +23,13 @@ func Profile() func() {
 	return func() {
 		pprof.StopCPUProfile()
 		f.Close()
+	}
+}
+
+func Perf() func() {
+	t1 := time.Now()
+
+	return func() {
+		fmt.Println(time.Since(t1))
 	}
 }

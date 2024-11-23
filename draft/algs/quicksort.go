@@ -1,17 +1,30 @@
 package main
 
 import (
-	"fmt"
+	"math/rand/v2"
+
+	"gobox/internal/utils"
 )
 
 func main() {
-	arr := []int{5, 3, 1, 2, 55, 11, 4}
+	arrSize := 10_000_000
+	arr := make([]int, arrSize)
+	for i := range arr {
+		arr[i] = rand.IntN(arrSize)
+	}
 
-	fmt.Println(arr)
-	fmt.Println(quicksort(arr))
+	defer utils.Perf()()
+	// 550ms
+	okSort(arr, 0, len(arr)-1)
+
+	// 1.5s
+	// noobSort(arr)
+
+	// 600ms
+	// slices.Sort(arr)
 }
 
-func quicksort(arr []int) []int {
+func noobSort(arr []int) []int {
 	if len(arr) <= 1 {
 		return arr
 	}
@@ -27,5 +40,29 @@ func quicksort(arr []int) []int {
 		}
 	}
 
-	return append(append(quicksort(left), pivot), quicksort(right)...)
+	return append(append(noobSort(left), pivot), noobSort(right)...)
+}
+
+func okSort(arr []int, low, high int) {
+	if low < high {
+		p := partition(arr, low, high)
+
+		okSort(arr, low, p-1)
+		okSort(arr, p+1, high)
+	}
+}
+
+func partition(arr []int, low, high int) int {
+	pivot := arr[high]
+	i := low
+
+	for j := low; j < high; j++ {
+		if arr[j] < pivot {
+			arr[i], arr[j] = arr[j], arr[i]
+			i++
+		}
+	}
+
+	arr[i], arr[high] = arr[high], arr[i]
+	return i
 }
