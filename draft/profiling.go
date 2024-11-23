@@ -56,7 +56,7 @@ func main() {
 	}
 
 	totals := make(StatMap)
-	for range len(parts) {
+	for range parts {
 		chunk := <-partChannel
 		processChunk(&chunk, &totals)
 	}
