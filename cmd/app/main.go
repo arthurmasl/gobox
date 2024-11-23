@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"math/rand/v2"
-	"os"
-	"runtime/pprof"
 	"strconv"
 	"strings"
 	"time"
+
+	"gobox/utils"
 )
 
 type Part struct {
@@ -20,31 +20,12 @@ type Stat struct {
 	min, max, sum, count int
 }
 
-func startProfiling() func() {
-	fmt.Println("Profiling...")
-
-	f, err := os.Create("cpu_profile.prof")
-	if err != nil {
-		panic(err)
-	}
-
-	if err := pprof.StartCPUProfile(f); err != nil {
-		f.Close()
-		panic(err)
-	}
-
-	return func() {
-		pprof.StopCPUProfile()
-		f.Close()
-	}
-}
-
 func main() {
 	workers := 12
 
 	input := generateInput(10_000_000)
 
-	stopProfiling := startProfiling()
+	stopProfiling := utils.Profile()
 	defer stopProfiling()
 
 	t1 := time.Now()
