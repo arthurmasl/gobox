@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"gobox/internal/utils"
+	"strings"
+)
 
 type BinaryTree struct {
 	root *Node
@@ -18,7 +22,6 @@ func (tree *BinaryTree) insert(value int) {
 
 	for {
 		if current == nil {
-			fmt.Println("isert")
 			current = node
 			break
 		}
@@ -40,38 +43,72 @@ func (tree *BinaryTree) insert(value int) {
 }
 
 func (tree *BinaryTree) print() {
-	queue := make([]*Node, 0)
-	queue = append(queue, tree.root)
+	queue := utils.NewQueue[*Node]()
+	queue.Insert(tree.root)
 
-	fmt.Println("root:", tree.root.value)
+	items := 0
+	expected := 1
+	spaces := 0
 
-	for len(queue) != 0 {
-		node := queue[0]
+	for queue.Length != 0 {
+		node := queue.Remove()
+		if node == nil {
+			continue
+		}
 
-		queue = append(queue[:0], queue[1:]...)
+		if expected == 1 {
+			spaces = 16
+		}
+		fmt.Printf("%v%v", strings.Repeat(" ", spaces), node.value)
+		if expected == 1 {
+			spaces = 20
+		}
+		items++
+
+		if items == expected {
+			fmt.Println()
+			items = 0
+			spaces /= 2
+
+			if expected == 1 {
+				expected = 2
+			} else {
+				expected *= 2
+			}
+		}
+
 		if node.left != nil {
-			queue = append(queue, node.left)
-			fmt.Printf("parent: %v, left: %v ", node.value, node.left.value)
+			queue.Insert(node.left)
 		}
+
 		if node.right != nil {
-			queue = append(queue, node.right)
-			fmt.Printf("parent: %v, right: %v\n", node.value, node.right.value)
+			queue.Insert(node.right)
 		}
+
 	}
 }
 
 func main() {
 	bst := BinaryTree{}
-	bst.root = &Node{value: 10}
-	bst.insert(15)
-	bst.insert(5)
-	bst.insert(25)
-	bst.insert(7)
-	bst.insert(2)
-	bst.insert(55)
-	bst.insert(4)
+	bst.root = &Node{value: 20}
 
-	fmt.Printf("%+v\n", bst.root)
+	bst.insert(15)
+	bst.insert(25)
+
+	bst.insert(14)
+	bst.insert(16)
+	bst.insert(24)
+	bst.insert(26)
+
+	bst.insert(13)
+	bst.insert(17)
+	bst.insert(15)
+	bst.insert(18)
+	bst.insert(23)
+	bst.insert(27)
+	bst.insert(22)
+	bst.insert(30)
 
 	bst.print()
+	fmt.Println()
 }
