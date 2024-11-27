@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"gobox/internal/utils"
+)
 
 type BinaryTree struct {
 	root *Node
@@ -40,21 +44,24 @@ func (tree *BinaryTree) insert(value int) {
 }
 
 func (tree *BinaryTree) print() {
-	queue := make([]*Node, 0)
-	queue = append(queue, tree.root)
+	queue := utils.NewQueue[*Node]()
+	queue.Insert(tree.root)
 
 	fmt.Println("root:", tree.root.value)
 
-	for len(queue) != 0 {
-		node := queue[0]
+	for queue.Length != 0 {
+		node := queue.Remove()
 
-		queue = append(queue[:0], queue[1:]...)
+		if node == nil {
+			continue
+		}
+
 		if node.left != nil {
-			queue = append(queue, node.left)
+			queue.Insert(node.left)
 			fmt.Printf("parent: %v, left: %v ", node.value, node.left.value)
 		}
 		if node.right != nil {
-			queue = append(queue, node.right)
+			queue.Insert(node.right)
 			fmt.Printf("parent: %v, right: %v\n", node.value, node.right.value)
 		}
 	}
@@ -67,11 +74,7 @@ func main() {
 	bst.insert(5)
 	bst.insert(25)
 	bst.insert(7)
-	bst.insert(2)
-	bst.insert(55)
-	bst.insert(4)
 
-	fmt.Printf("%+v\n", bst.root)
-
+	// fmt.Printf("%+v\n", bst.root)
 	bst.print()
 }
