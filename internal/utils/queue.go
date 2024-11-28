@@ -1,6 +1,6 @@
 package utils
 
-type queue[T any] struct {
+type Queue[T any] struct {
 	head, tail *node[T]
 	Length     int
 }
@@ -10,11 +10,11 @@ type node[T any] struct {
 	next  *node[T]
 }
 
-func NewQueue[T any]() *queue[T] {
-	return &queue[T]{}
+func NewQueue[T any]() *Queue[T] {
+	return &Queue[T]{}
 }
 
-func (q *queue[T]) Insert(value T) {
+func (q *Queue[T]) Insert(value T) {
 	node := &node[T]{value: value}
 
 	if q.tail == nil {
@@ -29,7 +29,7 @@ func (q *queue[T]) Insert(value T) {
 	q.Length += 1
 }
 
-func (q *queue[T]) Remove() T {
+func (q *Queue[T]) Remove() T {
 	var emptyValue T
 	head := q.head
 

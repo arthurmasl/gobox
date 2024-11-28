@@ -7,26 +7,46 @@ import (
 )
 
 type BinaryTree struct {
-	root *Node
+	root  *Node
+	queue *utils.Queue[*Node]
 }
 
 type Node struct {
-	value int
+	Value int
 	left  *Node
 	right *Node
 }
 
-func (tree *BinaryTree) insert(value int) {
-	node := &Node{value: value}
+func (tree *BinaryTree) Traverse() bool {
+	if tree.queue == nil {
+		tree.queue = utils.NewQueue[*Node]()
+		tree.queue.Insert(tree.root)
+	}
+
+	return tree.queue.Length > 0
+}
+
+func (tree *BinaryTree) Next() *Node {
+	queue := tree.queue
+	node := queue.Remove()
+
+	if node.left != nil {
+		queue.Insert(node.left)
+	}
+
+	if node.right != nil {
+		queue.Insert(node.right)
+	}
+
+	return node
+}
+
+func (tree *BinaryTree) Insert(value int) {
+	node := &Node{Value: value}
 	current := tree.root
 
-	for {
-		if current == nil {
-			current = node
-			break
-		}
-
-		if current.value > node.value {
+	for current != nil {
+		if current.Value > node.Value {
 			if current.left == nil {
 				current.left = node
 				break
@@ -42,7 +62,7 @@ func (tree *BinaryTree) insert(value int) {
 	}
 }
 
-func (tree *BinaryTree) print() {
+func (tree *BinaryTree) Print() {
 	queue := utils.NewQueue[*Node]()
 	queue.Insert(tree.root)
 
@@ -59,7 +79,7 @@ func (tree *BinaryTree) print() {
 		if expected == 1 {
 			spaces = 16
 		}
-		fmt.Printf("%v%v", strings.Repeat(" ", spaces), node.value)
+		fmt.Printf("%v%v", strings.Repeat(" ", spaces), node.Value)
 		if expected == 1 {
 			spaces = 20
 		}
@@ -89,26 +109,29 @@ func (tree *BinaryTree) print() {
 }
 
 func main() {
-	bst := BinaryTree{}
-	bst.root = &Node{value: 20}
+	tree := BinaryTree{root: &Node{Value: 20}}
 
-	bst.insert(15)
-	bst.insert(25)
+	tree.Insert(15)
+	tree.Insert(25)
 
-	bst.insert(14)
-	bst.insert(16)
-	bst.insert(24)
-	bst.insert(26)
+	tree.Insert(14)
+	tree.Insert(16)
+	tree.Insert(24)
+	tree.Insert(26)
 
-	bst.insert(13)
-	bst.insert(17)
-	bst.insert(15)
-	bst.insert(18)
-	bst.insert(23)
-	bst.insert(27)
-	bst.insert(22)
-	bst.insert(30)
+	tree.Insert(13)
+	tree.Insert(17)
+	tree.Insert(15)
+	tree.Insert(18)
+	tree.Insert(23)
+	tree.Insert(27)
+	tree.Insert(22)
+	tree.Insert(30)
 
-	bst.print()
-	fmt.Println()
+	for tree.Traverse() {
+		node := tree.Next()
+		fmt.Println(node.Value)
+	}
+
+	tree.Print()
 }
