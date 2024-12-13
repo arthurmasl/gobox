@@ -1,9 +1,7 @@
 package main
 
-import (
-	"gobox/cmd/graphs"
-)
+import "gobox/draft/graphs/search"
 
 func main() {
-	graphs.Start(graphs.BFS)
+	search.Start(search.BFS)
 }
