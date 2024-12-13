@@ -1,12 +1,18 @@
-package main
+package search
 
 import (
-	"container/list"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
 	"time"
+)
+
+type AlgType int
+
+const (
+	BFS AlgType = iota
+	DFS
 )
 
 type Pos struct {
@@ -16,49 +22,44 @@ type Pos struct {
 var (
 	directions = []Pos{{0, -1}, {1, 0}, {0, 1}, {-1, 0}}
 	visited    = make(map[Pos]bool)
+	canvas     *[]string
 )
 
-func main() {
-	input, _ := os.ReadFile("draft/graphs/bfs/example")
+func Start(alg AlgType) {
+	input, _ := os.ReadFile("draft/graphs/example")
 	lines := strings.Split(strings.TrimSpace(string(input)), "\n")
-
-	canvas := createCanvas(lines)
+	canvas = createCanvas(lines)
 
 	for y, row := range lines {
-		for x, col := range row {
+		for x := range row {
 			pos := Pos{x, y}
 			if visited[pos] {
 				continue
 			}
 
-			currId := string(col)
-			queue := list.New()
-			queue.PushFront(pos)
-
-			for queue.Len() > 0 {
-				curr := queue.Front()
-				queue.Remove(curr)
-				currPos := curr.Value.(Pos)
-
-				visited[currPos] = true
-				draw(canvas)
-
-				for _, dir := range directions {
-					nextPos := Pos{currPos.x + dir.x, currPos.y + dir.y}
-					if visited[nextPos] {
-						continue
-					}
-
-					if nextId, ok := getSafeValue(lines, nextPos); ok {
-						if nextId == currId {
-							queue.PushFront(nextPos)
-						}
-					}
-				}
+			if alg == BFS {
+				bfs(lines, pos)
+			} else {
+				dfs(lines, pos)
 			}
-
 		}
 	}
+}
+
+func getNeighbors(lines []string, pos Pos) []Pos {
+	id := string(lines[pos.y][pos.x])
+	neighbors := make([]Pos, 0)
+
+	for _, dir := range directions {
+		neighborPos := Pos{pos.x + dir.x, pos.y + dir.y}
+		neighborId, ok := getSafeValue(lines, neighborPos)
+
+		if ok && neighborId == id {
+			neighbors = append(neighbors, neighborPos)
+		}
+	}
+
+	return neighbors
 }
 
 func getSafeValue(arr []string, pos Pos) (string, bool) {
@@ -74,7 +75,7 @@ func createCanvas(lines []string) *[]string {
 
 var reset = "\033[0m"
 
-func draw(canvas *[]string) {
+func draw() {
 	cmd := exec.Command("clear")
 	cmd.Stdout = os.Stdout
 	cmd.Run()
