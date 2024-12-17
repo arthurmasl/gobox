@@ -19,3 +19,11 @@ func Window[Slice ~[]E, E any](slice Slice, size int) iter.Seq[Slice] {
 		}
 	}
 }
+
+func GetSafeValue(arr []string, x, y int) (byte, bool) {
+	if y >= 0 && y < len(arr) && x >= 0 && x < len(arr[y]) {
+		return arr[y][x], true
+	}
+
+	return 0, false
+}
