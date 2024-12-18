@@ -1,6 +1,11 @@
 package utils
 
-import "iter"
+import (
+	"fmt"
+	"iter"
+	"os"
+	"strings"
+)
 
 func UNUSED(x ...any) {}
 
@@ -26,4 +31,20 @@ func GetSafeValue(arr []string, x, y int) (byte, bool) {
 	}
 
 	return 0, false
+}
+
+func GetLines(inputDir string, args ...string) []string {
+	input, err := os.ReadFile("assets/" + inputDir + ".txt")
+	if err != nil {
+		fmt.Println("Error reading file", err)
+		return nil
+	}
+
+	sep := "\n"
+	if len(args) > 0 {
+		sep = args[0]
+	}
+
+	lines := strings.Split(strings.TrimSpace(string(input)), sep)
+	return lines
 }
