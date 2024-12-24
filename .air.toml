@@ -5,8 +5,8 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   bin = "./tmp/main"
-  # cmd = "go build -o ./tmp/main ./cmd/app"
-  cmd = "go build -o ./tmp/main ./examples/graphs/bfs_shortest/main.go"
+  cmd = "go build -o ./tmp/main ./cmd/app"
+  # cmd = "go build -o ./tmp/main ./examples/graphs/bfs_shortest/main.go"
   delay = 100
   exclude_dir = ["tmp", "static"]
   exclude_file = []
