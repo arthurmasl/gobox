@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"iter"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -47,4 +48,10 @@ func GetLines(inputDir string, args ...string) []string {
 
 	lines := strings.Split(strings.TrimSpace(string(input)), sep)
 	return lines
+}
+
+func ClearConsole() {
+	cmd := exec.Command("clear")
+	cmd.Stdout = os.Stdout
+	cmd.Run()
 }

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"math/rand/v2"
 	"strconv"
+	"time"
+
+	"gobox/internal/utils"
 )
 
 type loadBalancer struct {
@@ -40,6 +43,7 @@ func (balancer *loadBalancer) addServer(capacity int) {
 
 func (balancer *loadBalancer) addClient(id string) {
 	foundServer := false
+
 	for _, server := range balancer.servers {
 		if len(server.data) < balancer.capacity {
 			server.data = append(server.data, &client{id})
@@ -53,7 +57,19 @@ func (balancer *loadBalancer) addClient(id string) {
 	}
 }
 
+func (balancer *loadBalancer) removeClient(id string) {
+	for _, server := range balancer.servers {
+		for i, client := range server.data {
+			if client.id == id {
+				server.data = append(server.data[:i], server.data[i+1:]...)
+				break
+			}
+		}
+	}
+}
+
 func (balancer *loadBalancer) print() {
+	utils.ClearConsole()
 	fmt.Printf("capacity: %v, servers: %v\n", balancer.capacity, len(balancer.servers))
 	for _, server := range balancer.servers {
 		fmt.Printf("  server: %v, clients: %v\n", server.id, len(server.data))
@@ -65,13 +81,17 @@ func (balancer *loadBalancer) print() {
 }
 
 func main() {
-	balancer := newLoadBalancer(5)
-	for range 19 {
-		id := strconv.Itoa(rand.N(99))
+	balancer := newLoadBalancer(8)
+
+	for {
+		id := strconv.Itoa(rand.N(30))
 		balancer.addClient(id)
+		time.AfterFunc(
+			time.Duration(rand.N(10)*int(time.Second)),
+			func() { balancer.removeClient(id) },
+		)
+
+		balancer.print()
+		time.Sleep(time.Duration(rand.N(500) * int(time.Millisecond)))
 	}
-
-	balancer.addClient("bob")
-
-	balancer.print()
 }
