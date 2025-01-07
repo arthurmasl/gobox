@@ -1,14 +1,12 @@
 package main
 
-import (
-	"os"
-	"os/exec"
-)
+import "fmt"
 
 func clearConsole() {
-	cmd := exec.Command("clear")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	// cmd := exec.Command("clear")
+	// cmd.Stdout = os.Stdout
+	// cmd.Run()
+	fmt.Print("\033[H\033[2J")
 }
 
 func getPrefix(item *Item) string {

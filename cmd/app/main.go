@@ -9,11 +9,12 @@ import (
 )
 
 // const chars = "@%#*+=-:. "
-// const chars = "   :danD"
-const chars = " .,:ilwW"
+const chars = "   :danD"
+
+// const chars = " .,:ilwW"
 
 func main() {
-	file, err := os.Open("resources/full.gif")
+	file, err := os.Open("resources/momo.gif")
 	if err != nil {
 		panic(err)
 	}
