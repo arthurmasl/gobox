@@ -6,34 +6,31 @@ import (
 	"image/gif"
 	"os"
 	"time"
+
+	"gobox/internal/utils"
 )
 
 // const chars = "@%#*+=-:. "
-const chars = "   :danD"
-
 // const chars = " .,:ilwW"
+
+const chars = "   :danD"
 
 func main() {
 	file, err := os.Open("resources/momo.gif")
-	if err != nil {
-		panic(err)
-	}
+	utils.CheckPanic(err)
 	defer file.Close()
 
 	g, err := gif.DecodeAll(file)
-	if err != nil {
-		panic(err)
-	}
+	utils.CheckPanic(err)
 
 	frames := make([]string, 0)
+
 	for _, i := range g.Image {
 		frame := ""
 
 		for y := i.Rect.Min.Y; y < i.Rect.Max.Y; y++ {
 			for x := i.Rect.Min.X; x < i.Rect.Max.X; x++ {
-				color := i.At(x, y)
-				char := pixelToASCII(color)
-				frame += char
+				frame += pixelToASCII(i.At(x, y))
 			}
 
 			frame += "\n"
@@ -42,18 +39,22 @@ func main() {
 		frames = append(frames, frame)
 	}
 
+	utils.ClearConsole()
 	for {
 		for _, frame := range frames {
 			fmt.Println(frame)
-			time.Sleep(50 * time.Millisecond)
+			utils.MoveCursor(0, 0)
+			time.Sleep(1000 / 60 * time.Millisecond)
 		}
 	}
 }
 
 func pixelToASCII(pixel color.Color) string {
 	r, g, b, _ := pixel.RGBA()
-	gray := uint8(0.299*float64(r/256) + 0.587*float64(g/256) + 0.114*float64(b/256))
-	scale := float64(gray) / 255.0
+
+	gray := 0.3*float64(r/256) + 0.6*float64(g/256) + 0.1*float64(b/256)
+	scale := gray / 255
 	index := int(scale * float64(len(chars)-1))
+
 	return string(chars[index])
 }

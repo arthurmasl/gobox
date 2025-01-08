@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"iter"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -51,7 +50,18 @@ func GetLines(inputDir string, args ...string) []string {
 }
 
 func ClearConsole() {
-	cmd := exec.Command("clear")
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	// cmd := exec.Command("clear")
+	// cmd.Stdout = os.Stdout
+	// cmd.Run()
+	fmt.Print("\033[H\033[2J")
+}
+
+func MoveCursor(row, column int) {
+	fmt.Printf("\033[%d;%dH", row, column)
+}
+
+func CheckPanic(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
