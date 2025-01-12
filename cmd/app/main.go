@@ -2,43 +2,48 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 )
 
-type State rune
+type player struct {
+	pos complex128
+	hp  int
+}
 
-const (
-	Idle State = iota
-	Run
-	Attack
-)
+type enemy struct {
+	pos   complex128
+	hp    int
+	aggro bool
+}
 
-var states = map[State]string{Idle: "idle", Run: "run", Attack: "attack"}
+func (this *player) draw()   { fmt.Printf("player drawed at %v\n", this.pos) }
+func (this *player) update() { this.pos += 1 }
 
-func (state State) String() string {
-	return states[state]
+func (this *enemy) draw()   { fmt.Printf("enemy drawed at %v\n", this.pos) }
+func (this *enemy) update() { this.pos += 2 }
+
+type entity interface {
+	update()
+	draw()
 }
 
 func main() {
-	for k, v := range states {
-		fmt.Println(k, v)
-	}
+	entities := make([]entity, 0)
+	entities = append(entities, &player{}, &enemy{})
 
-	printType(Idle)
-	printType("aa")
-	printType('a')
-	printType(complex(11, 55))
-	printType(1<<63 - 1)
-	printType(int64(1<<63 - 1))
-}
+	for _, entity := range entities {
+		fmt.Printf("%T\n", entity)
+		entity.update()
+		entity.draw()
 
-func printType(element any) {
-	fmt.Print("element type is ")
+		switch entity := entity.(type) {
+		case *player:
+			fmt.Println(entity.hp, entity.pos)
+			fmt.Println("player")
+		case *enemy:
+			fmt.Println(entity.aggro)
+			fmt.Println("enemy")
+		}
 
-	switch element.(type) {
-	case State:
-		fmt.Println("state")
-	default:
-		fmt.Println(reflect.TypeOf(element))
+		fmt.Println()
 	}
 }
