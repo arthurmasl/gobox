@@ -30,7 +30,6 @@ func main() {
 }
 
 func worker(id int, jobs <-chan int, results chan<- int) {
-	fmt.Println("worker", id)
 	for jobId := range jobs {
 		fmt.Printf("worker %d started job %d\n", id, jobId)
 		time.Sleep(time.Second)
