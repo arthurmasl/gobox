@@ -7,11 +7,12 @@ import (
 
 func main() {
 	const numJobs = 5
+	const numWorkers = 2
 
 	jobs := make(chan int, numJobs)
 	results := make(chan int, numJobs)
 
-	for i := range numJobs {
+	for i := range numWorkers {
 		go worker(i, jobs, results)
 	}
 
@@ -29,6 +30,7 @@ func main() {
 }
 
 func worker(id int, jobs <-chan int, results chan<- int) {
+	fmt.Println("worker", id)
 	for jobId := range jobs {
 		fmt.Printf("worker %d started job %d\n", id, jobId)
 		time.Sleep(time.Second)
