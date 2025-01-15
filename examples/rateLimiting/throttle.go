@@ -6,10 +6,8 @@ import (
 )
 
 func main() {
-	const numRequests = 15
-
-	requests := make(chan int, numRequests)
-	for i := range numRequests {
+	requests := make(chan int, 5)
+	for i := range 5 {
 		requests <- i
 	}
 	close(requests)
